@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELI5: APIって何?</title>
+<style>
+  :root{
+    --bg:#fdf6ec; --card:#ffffff; --ink:#2d2a26; --muted:#8a8278;
+    --brand:#ff6b35; --brand2:#4ecdc4; --accent:#ffd166;
+    --line:#e8e0d4; --ok:#2a9d8f; --bad:#e76f51;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1e1d1b; --card:#2a2825; --ink:#f2ede4; --muted:#a89f92; --line:#3a3732; }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,-apple-system,sans-serif;line-height:1.7;padding:2rem 1rem}
+  main{max-width:900px;margin:0 auto}
+  h1{font-size:2.4rem;line-height:1.2;margin-bottom:.5rem}
+  .hook{font-size:1.25rem;color:var(--muted);margin-bottom:2.5rem;max-width:40em}
+  .step{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2rem;margin-bottom:2rem}
+  .step-num{display:inline-block;background:var(--brand);color:#fff;font-weight:700;border-radius:999px;padding:.15rem .9rem;font-size:.95rem;margin-bottom:1rem}
+  .step h2{font-size:1.6rem;margin-bottom:.4rem}
+  .caption{color:var(--muted);font-size:1.05rem;margin-top:1rem}
+  svg{width:100%;height:auto;display:block;margin:1.2rem 0}
+  .recap{background:var(--accent);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .recap h3{font-size:1.3rem;margin-bottom:.6rem}
+  .recap ul{margin-left:1.2rem}
+  .recap li{margin-bottom:.4rem}
+  .term{border-bottom:2px dotted var(--brand);cursor:help;position:relative}
+  .term .tip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:.9rem;padding:.5rem .8rem;border-radius:10px;width:max-content;max-width:260px;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+  .term:hover .tip,.term:focus .tip{display:block}
+  .quiz{background:var(--card);border:2px solid var(--brand2);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .quiz h3{font-size:1.3rem;margin-bottom:1rem}
+  .q{margin-bottom:1.2rem}
+  .q p{font-weight:600;margin-bottom:.4rem}
+  .q .opts{display:flex;flex-direction:column;gap:.4rem}
+  .q button{text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:.5rem .9rem;font-size:1rem;cursor:pointer;color:var(--ink);transition:all .15s}
+  .q button:hover{border-color:var(--brand2)}
+  .q button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .q button.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+  .q .fb{margin-top:.4rem;font-size:.95rem;color:var(--muted);min-height:1.4em}
+  .anim *{animation:slidein .7s ease both}
+  .anim *:nth-child(2){animation-delay:.1s}
+  .anim *:nth-child(3){animation-delay:.2s}
+  .anim *:nth-child(4){animation-delay:.3s}
+  @keyframes slidein{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+  @media print{ .anim *{animation:none!important;opacity:1!important;transform:none!important} }
+  .glossary{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .glossary h3{font-size:1.3rem;margin-bottom:.6rem}
+  .glossary dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem}
+  .glossary dt{font-weight:700;color:var(--brand)}
+  .glossary dd{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>✨ APIって何?</h1>
+  <p class="hook">APIはレストランの<strong>メニュー</strong>みたいなもの。キッチンに入らなくても、メニューを見て注文すれば、料理が運ばれてくる。</p>
+
+  <section class="step">
+    <span class="step-num">①</span>
+    <h2>APIがない世界</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 260" role="img" aria-label="お客さんがキッチンに突入して、シェフが大混乱">
+      <rect x="60" y="40" width="250" height="180" rx="20" fill="#ffe8d6" stroke="#ff6b35" stroke-width="3"/>
+      <circle cx="150" cy="90" r="22" fill="#ffd166" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="128" y="112" width="44" height="70" rx="12" fill="#ff6b35"/>
+      <text x="150" y="220" text-anchor="middle" font-size="20" font-weight="bold">お客さん</text>
+      <path d="M310 130 H 440" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <text x="375" y="110" text-anchor="middle" font-size="18" fill="#8a8278">キッチンに突入</text>
+      <rect x="450" y="40" width="290" height="180" rx="20" fill="#e0f7f4" stroke="#4ecdc4" stroke-width="3"/>
+      <circle cx="540" cy="90" r="22" fill="#4ecdc4" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="518" y="112" width="44" height="70" rx="12" fill="#2a9d8f"/>
+      <text x="540" y="220" text-anchor="middle" font-size="20" font-weight="bold">シェフ</text>
+      <text x="600" y="120" font-size="18" fill="#8a8278">「入るな!大混乱!」</text>
+      <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d2a26"/></marker></defs>
+    </svg>
+    </div>
+    <p class="caption">ルールがないと、お客さんがキッチンに突入して大混乱。</p>
+  </section>
+
+  <section class="step">
+    <span class="step-num">②</span>
+    <h2>APIがあれば:メニュー</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 260" role="img" aria-label="真ん中にメニュー。お客さんはメニューで注文、シェフはメニュー通りに調理">
+      <rect x="40" y="40" width="200" height="180" rx="20" fill="#ffe8d6" stroke="#ff6b35" stroke-width="3"/>
+      <circle cx="110" cy="90" r="22" fill="#ffd166" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="88" y="112" width="44" height="70" rx="12" fill="#ff6b35"/>
+      <text x="110" y="220" text-anchor="middle" font-size="20" font-weight="bold">お客さん</text>
+      <path d="M240 130 H 320" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <rect x="330" y="60" width="140" height="150" rx="16" fill="#ffffff" stroke="#ffd166" stroke-width="4"/>
+      <text x="400" y="100" text-anchor="middle" font-size="18" font-weight="bold">メニュー</text>
+      <line x1="355" y1="115" x2="445" y2="115" stroke="#ffd166" stroke-width="3"/>
+      <text x="400" y="140" text-anchor="middle" font-size="15">料理名</text>
+      <text x="400" y="165" text-anchor="middle" font-size="15">値段</text>
+      <text x="400" y="190" text-anchor="middle" font-size="15">作り方</text>
+      <path d="M470 130 H 560" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <rect x="570" y="40" width="200" height="180" rx="20" fill="#e0f7f4" stroke="#4ecdc4" stroke-width="3"/>
+      <circle cx="640" cy="90" r="22" fill="#4ecdc4" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="618" y="112" width="44" height="70" rx="12" fill="#2a9d8f"/>
+      <text x="640" y="220" text-anchor="middle" font-size="20" font-weight="bold">シェフ</text>
+      <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d2a26"/></marker></defs>
+    </svg>
+    </div>
+    <p class="caption">メニューこそ <span class="term" tabindex="0" data-gloss="プログラム同士がやり取りするときの共通ルール">API</span>:何を注文できて、どんな形式で返ってくるか。</p>
+  </section>
+
+  <section class="step">
+    <span class="step-num">③</span>
+    <h2>実例:天気アプリ</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 260" role="img" aria-label="スマホの天気アプリがAPIで気象台にデータを聞く">
+      <rect x="40" y="40" width="170" height="180" rx="20" fill="#ffe8d6" stroke="#ff6b35" stroke-width="3"/>
+      <rect x="70" y="65" width="110" height="130" rx="14" fill="#ffffff" stroke="#2d2a26" stroke-width="3"/>
+      <text x="125" y="100" text-anchor="middle" font-size="16" font-weight="bold">天気アプリ</text>
+      <text x="125" y="130" text-anchor="middle" font-size="28">🌤</text>
+      <text x="125" y="165" text-anchor="middle" font-size="14" fill="#8a8278">26°C</text>
+      <path d="M210 130 H 300" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <text x="255" y="110" text-anchor="middle" font-size="16" fill="#8a8278">「今日の天気は?」</text>
+      <rect x="310" y="60" width="180" height="140" rx="16" fill="#ffffff" stroke="#ffd166" stroke-width="4"/>
+      <text x="400" y="95" text-anchor="middle" font-size="17" font-weight="bold">APIメニュー</text>
+      <line x1="340" y1="108" x2="460" y2="108" stroke="#ffd166" stroke-width="3"/>
+      <text x="400" y="135" text-anchor="middle" font-size="14">GET /weather</text>
+      <text x="400" y="160" text-anchor="middle" font-size="14">city=東京</text>
+      <text x="400" y="185" text-anchor="middle" font-size="14">→ 気温/湿度</text>
+      <path d="M490 130 H 580" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <rect x="590" y="40" width="180" height="180" rx="20" fill="#e0f7f4" stroke="#4ecdc4" stroke-width="3"/>
+      <path d="M630 130 q30 -50 60 0" fill="#c4e8e5" stroke="#4ecdc4" stroke-width="3"/>
+      <path d="M690 130 q30 -50 60 0" fill="#c4e8e5" stroke="#4ecdc4" stroke-width="3"/>
+      <text x="680" y="195" text-anchor="middle" font-size="16" font-weight="bold">気象台</text>
+      <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d2a26"/></marker></defs>
+    </svg>
+    </div>
+    <p class="caption">アプリは自分で気象台を持たなくていい。<span class="term" tabindex="0" data-gloss="サーバーにデータを標準的な形で求めること">リクエスト</span>するだけ。</p>
+  </section>
+
+  <section class="recap">
+    <h3>🎯 まとめると</h3>
+    <ul>
+      <li>APIはプログラム同士が注文する「メニュー」</li>
+      <li>何を、どう聞いて、何が返るかを決めている</li>
+      <li>もう「キッチンに突入」しなくて済む</li>
+    </ul>
+  </section>
+
+  <section class="quiz">
+    <h3>🧠 クイズ</h3>
+    <div class="q">
+      <p>1. APIにいちばん近いものは?</p>
+      <div class="opts">
+        <button>キッチンの鍵</button>
+        <button data-ok>メニュー</button>
+        <button>フライパン</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <div class="q">
+      <p>2. APIがあると、プログラム同士はどう協力する?</p>
+      <div class="opts">
+        <button>お互いの内部データを直接読む</button>
+        <button data-ok>決まった形式でリクエストを送る</button>
+        <button>同じパソコンを共有する</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <div class="q">
+      <p>3. 天気アプリはなぜ自分の気象台を持たなくていい?</p>
+      <div class="opts">
+        <button data-ok>APIで気象台にデータを聞くから</button>
+        <button>自分で天気を予測できるから</button>
+        <button>適当に当てているだけだから</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+  <section class="glossary">
+    <h3>📖 用語集</h3>
+    <dl>
+      <dt>API</dt><dd>プログラム同士が「注文」するためのメニュー。聞き方と返り値を決める</dd>
+      <dt>リクエスト(request)</dt><dd>あるプログラムが別のプログラムに何かを求める標準的な形</dd>
+      <dt>サーバー</dt><dd>データを保管し、ほかの人のために働くコンピューター</dd>
+    </dl>
+  </section>
+</main>
+<script>
+  document.querySelectorAll('.q').forEach(q=>{
+    const btns=q.querySelectorAll('button');
+    const fb=q.querySelector('.fb');
+    btns.forEach(b=>{
+      b.addEventListener('click',()=>{
+        btns.forEach(x=>x.classList.remove('ok','bad'));
+        if(b.hasAttribute('data-ok')){
+          b.classList.add('ok');
+          fb.textContent='✅ 正解!';
+        }else{
+          b.classList.add('bad');
+          const okIdx=[...btns].findIndex(x=>x.hasAttribute('data-ok'));
+          fb.textContent='❌ もう一度 — ステップ'+(okIdx+1)+'を見てみよう。';
+        }
+      });
+    });
+  });
+  document.querySelectorAll('.term').forEach(t=>{
+    t.addEventListener('click',e=>{e.preventDefault();t.focus();});
+  });
+</script>
+</body>
+</html>

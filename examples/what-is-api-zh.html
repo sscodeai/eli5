@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELI5: API(应用程序接口)</title>
+<style>
+  :root{
+    --bg:#fdf6ec; --card:#ffffff; --ink:#2d2a26; --muted:#8a8278;
+    --brand:#ff6b35; --brand2:#4ecdc4; --accent:#ffd166;
+    --line:#e8e0d4; --ok:#2a9d8f; --bad:#e76f51;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1e1d1b; --card:#2a2825; --ink:#f2ede4; --muted:#a89f92; --line:#3a3732; }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,-apple-system,sans-serif;line-height:1.6;padding:2rem 1rem}
+  main{max-width:900px;margin:0 auto}
+  h1{font-size:2.4rem;line-height:1.2;margin-bottom:.5rem}
+  .hook{font-size:1.25rem;color:var(--muted);margin-bottom:2.5rem;max-width:40em}
+  .step{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2rem;margin-bottom:2rem}
+  .step-num{display:inline-block;background:var(--brand);color:#fff;font-weight:700;border-radius:999px;padding:.15rem .9rem;font-size:.95rem;margin-bottom:1rem}
+  .step h2{font-size:1.6rem;margin-bottom:.4rem}
+  .caption{color:var(--muted);font-size:1.05rem;margin-top:1rem}
+  svg{width:100%;height:auto;display:block;margin:1.2rem 0}
+  .recap{background:var(--accent);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .recap h3{font-size:1.3rem;margin-bottom:.6rem}
+  .recap ul{margin-left:1.2rem}
+  .recap li{margin-bottom:.4rem}
+  .term{border-bottom:2px dotted var(--brand);cursor:help;position:relative}
+  .term .tip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:.9rem;padding:.5rem .8rem;border-radius:10px;width:max-content;max-width:260px;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+  .term:hover .tip,.term:focus .tip{display:block}
+  .quiz{background:var(--card);border:2px solid var(--brand2);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .quiz h3{font-size:1.3rem;margin-bottom:1rem}
+  .q{margin-bottom:1.2rem}
+  .q p{font-weight:600;margin-bottom:.4rem}
+  .q .opts{display:flex;flex-direction:column;gap:.4rem}
+  .q button{text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:.5rem .9rem;font-size:1rem;cursor:pointer;color:var(--ink);transition:all .15s}
+  .q button:hover{border-color:var(--brand2)}
+  .q button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .q button.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+  .q .fb{margin-top:.4rem;font-size:.95rem;color:var(--muted);min-height:1.4em}
+  .anim *{animation:slidein .7s ease both}
+  .anim *:nth-child(2){animation-delay:.1s}
+  .anim *:nth-child(3){animation-delay:.2s}
+  .anim *:nth-child(4){animation-delay:.3s}
+  @keyframes slidein{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+  @media print{ .anim *{animation:none!important;opacity:1!important;transform:none!important} }
+  .glossary{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .glossary h3{font-size:1.3rem;margin-bottom:.6rem}
+  .glossary dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem}
+  .glossary dt{font-weight:700;color:var(--brand)}
+  .glossary dd{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>✨ API 是什么?</h1>
+  <p class="hook">API 就像餐厅的"点菜单"——你不用进厨房,照着菜单点菜,厨房就把菜端给你。</p>
+
+  <section class="step">
+    <span class="step-num">①</span>
+    <h2>没有 API 的世界</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 260" role="img" aria-label="客人直接冲进厨房要菜,厨师手忙脚乱">
+      <rect x="60" y="40" width="250" height="180" rx="20" fill="#ffe8d6" stroke="#ff6b35" stroke-width="3"/>
+      <circle cx="150" cy="90" r="22" fill="#ffd166" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="128" y="112" width="44" height="70" rx="12" fill="#ff6b35"/>
+      <text x="150" y="220" text-anchor="middle" font-size="20" font-weight="bold">客人</text>
+      <path d="M310 130 H 440" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <text x="375" y="110" text-anchor="middle" font-size="18" fill="#8a8278">直接闯进厨房</text>
+      <rect x="450" y="40" width="290" height="180" rx="20" fill="#e0f7f4" stroke="#4ecdc4" stroke-width="3"/>
+      <circle cx="540" cy="90" r="22" fill="#4ecdc4" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="518" y="112" width="44" height="70" rx="12" fill="#2a9d8f"/>
+      <text x="540" y="220" text-anchor="middle" font-size="20" font-weight="bold">厨师</text>
+      <text x="595" y="120" font-size="18" fill="#8a8278">“别进来!乱套了!”</text>
+      <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d2a26"/></marker></defs>
+    </svg>
+    </div>
+    <p class="caption">没有规矩,客人只能闯进厨房,大家都乱套。</p>
+  </section>
+
+  <section class="step">
+    <span class="step-num">②</span>
+    <h2>有了 API:一张菜单</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 260" role="img" aria-label="中间一张点菜单,客人按菜单点,厨师按菜单做">
+      <rect x="40" y="40" width="200" height="180" rx="20" fill="#ffe8d6" stroke="#ff6b35" stroke-width="3"/>
+      <circle cx="110" cy="90" r="22" fill="#ffd166" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="88" y="112" width="44" height="70" rx="12" fill="#ff6b35"/>
+      <text x="110" y="220" text-anchor="middle" font-size="20" font-weight="bold">客人</text>
+      <path d="M240 130 H 320" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <rect x="330" y="60" width="140" height="150" rx="16" fill="#ffffff" stroke="#ffd166" stroke-width="4"/>
+      <text x="400" y="100" text-anchor="middle" font-size="18" font-weight="bold">菜单</text>
+      <line x1="355" y1="115" x2="445" y2="115" stroke="#ffd166" stroke-width="3"/>
+      <text x="400" y="140" text-anchor="middle" font-size="15">菜名</text>
+      <text x="400" y="165" text-anchor="middle" font-size="15">价格</text>
+      <text x="400" y="190" text-anchor="middle" font-size="15">做法</text>
+      <path d="M470 130 H 560" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <rect x="570" y="40" width="200" height="180" rx="20" fill="#e0f7f4" stroke="#4ecdc4" stroke-width="3"/>
+      <circle cx="640" cy="90" r="22" fill="#4ecdc4" stroke="#2d2a26" stroke-width="3"/>
+      <rect x="618" y="112" width="44" height="70" rx="12" fill="#2a9d8f"/>
+      <text x="640" y="220" text-anchor="middle" font-size="20" font-weight="bold">厨师</text>
+      <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d2a26"/></marker></defs>
+    </svg>
+    </div>
+    <p class="caption">菜单就是 <span class="term" tabindex="0" data-gloss="程序之间约定的请求方式">API</span>:写着你能点什么、要什么格式、能得到什么。</p>
+  </section>
+
+  <section class="step">
+    <span class="step-num">③</span>
+    <h2>真实例子:天气 App</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 260" role="img" aria-label="手机天气 App 通过 API 向气象站要数据">
+      <rect x="40" y="40" width="170" height="180" rx="20" fill="#ffe8d6" stroke="#ff6b35" stroke-width="3"/>
+      <rect x="70" y="65" width="110" height="130" rx="14" fill="#ffffff" stroke="#2d2a26" stroke-width="3"/>
+      <text x="125" y="100" text-anchor="middle" font-size="16" font-weight="bold">天气 App</text>
+      <text x="125" y="130" text-anchor="middle" font-size="28">🌤</text>
+      <text x="125" y="165" text-anchor="middle" font-size="14" fill="#8a8278">26°C</text>
+      <path d="M210 130 H 300" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <text x="255" y="110" text-anchor="middle" font-size="16" fill="#8a8278">“今天天气?”</text>
+      <rect x="310" y="60" width="180" height="140" rx="16" fill="#ffffff" stroke="#ffd166" stroke-width="4"/>
+      <text x="400" y="95" text-anchor="middle" font-size="17" font-weight="bold">API 菜单</text>
+      <line x1="340" y1="108" x2="460" y2="108" stroke="#ffd166" stroke-width="3"/>
+      <text x="400" y="135" text-anchor="middle" font-size="14">GET /weather</text>
+      <text x="400" y="160" text-anchor="middle" font-size="14">城市=东京</text>
+      <text x="400" y="185" text-anchor="middle" font-size="14">→ 温度/湿度</text>
+      <path d="M490 130 H 580" stroke="#2d2a26" stroke-width="5" marker-end="url(#arr)"/>
+      <rect x="590" y="40" width="180" height="180" rx="20" fill="#e0f7f4" stroke="#4ecdc4" stroke-width="3"/>
+      <path d="M630 130 q30 -50 60 0" fill="#c4e8e5" stroke="#4ecdc4" stroke-width="3"/>
+      <path d="M690 130 q30 -50 60 0" fill="#c4e8e5" stroke="#4ecdc4" stroke-width="3"/>
+      <text x="680" y="195" text-anchor="middle" font-size="16" font-weight="bold">气象站</text>
+      <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#2d2a26"/></marker></defs>
+    </svg>
+    </div>
+    <p class="caption">App 不必自己装气象站,按 <span class="term" tabindex="0" data-gloss="向服务器要数据的标准问法">请求</span> 问一句就有答案。</p>
+  </section>
+
+  <section class="recap">
+    <h3>🎯 所以,总结一下</h3>
+    <ul>
+      <li>API 是程序之间"点菜"的菜单</li>
+      <li>它规定:你能问什么、怎么问、得到什么</li>
+      <li>有了它,各家程序不用互相"闯厨房"</li>
+    </ul>
+  </section>
+
+  <section class="quiz">
+    <h3>🧠 考考你</h3>
+    <div class="q">
+      <p>1. API 最像下面哪样东西?</p>
+      <div class="opts">
+        <button>一把厨房钥匙</button>
+        <button data-ok>一张点菜单</button>
+        <button>一口锅</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <div class="q">
+      <p>2. 有了 API,程序之间怎么协作?</p>
+      <div class="opts">
+        <button>直接读对方的内部数据</button>
+        <button data-ok>按约定的格式互相发请求</button>
+        <button>共用同一台电脑</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <div class="q">
+      <p>3. 天气 App 为什么不用自己装气象站?</p>
+      <div class="opts">
+        <button data-ok>它通过 API 向气象站要数据</button>
+        <button>它自己会预测天气</button>
+        <button>它只是乱猜的</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+  <section class="glossary">
+    <h3>📖 术语表</h3>
+    <dl>
+      <dt>API</dt><dd>程序之间"点菜"的菜单,约定了请求和返回的格式</dd>
+      <dt>请求(request)</dt><dd>一个程序向另一个程序"要东西"的标准问法</dd>
+      <dt>服务器</dt><dd>专门存数据、替别人干活的那台电脑</dd>
+    </dl>
+  </section>
+</main>
+<script>
+  document.querySelectorAll('.q').forEach(q=>{
+    const btns=q.querySelectorAll('button');
+    const fb=q.querySelector('.fb');
+    btns.forEach(b=>{
+      b.addEventListener('click',()=>{
+        btns.forEach(x=>x.classList.remove('ok','bad'));
+        if(b.hasAttribute('data-ok')){
+          b.classList.add('ok');
+          fb.textContent='✅ 答对了!';
+        }else{
+          b.classList.add('bad');
+          const okIdx=[...btns].findIndex(x=>x.hasAttribute('data-ok'));
+          fb.textContent='❌ 再想想——回第 '+(okIdx+1)+' 步看看。';
+        }
+      });
+    });
+  });
+  document.querySelectorAll('.term').forEach(t=>{
+    t.addEventListener('click',e=>{e.preventDefault();t.focus();});
+  });
+</script>
+</body>
+</html>

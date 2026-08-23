@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELI5: 主题名称</title>
+<style>
+  :root{
+    --bg:#fdf6ec; --card:#ffffff; --ink:#2d2a26; --muted:#8a8278;
+    --brand:#ff6b35; --brand2:#4ecdc4; --accent:#ffd166;
+    --line:#e8e0d4; --ok:#2a9d8f; --bad:#e76f51;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1e1d1b; --card:#2a2825; --ink:#f2ede4; --muted:#a89f92; --line:#3a3732; }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,-apple-system,sans-serif;line-height:1.6;padding:2rem 1rem}
+  main{max-width:900px;margin:0 auto}
+  h1{font-size:2.4rem;line-height:1.2;margin-bottom:.5rem}
+  .hook{font-size:1.25rem;color:var(--muted);margin-bottom:2.5rem;max-width:40em}
+  .step{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2rem;margin-bottom:2rem}
+  .step-num{display:inline-block;background:var(--brand);color:#fff;font-weight:700;border-radius:999px;padding:.15rem .9rem;font-size:.95rem;margin-bottom:1rem}
+  .step h2{font-size:1.6rem;margin-bottom:.4rem}
+  .caption{color:var(--muted);font-size:1.05rem;margin-top:1rem}
+  svg{width:100%;height:auto;display:block;margin:1.2rem 0}
+  .recap{background:var(--accent);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .recap h3{font-size:1.3rem;margin-bottom:.6rem}
+  .recap ul{margin-left:1.2rem}
+  .recap li{margin-bottom:.4rem}
+
+  /* 悬停术语 */
+  .term{border-bottom:2px dotted var(--brand);cursor:help;position:relative}
+  .term .tip{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:.9rem;padding:.5rem .8rem;border-radius:10px;width:max-content;max-width:260px;z-index:10;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+  .term:hover .tip,.term:focus .tip{display:block}
+
+  /* Quiz */
+  .quiz{background:var(--card);border:2px solid var(--brand2);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .quiz h3{font-size:1.3rem;margin-bottom:1rem}
+  .q{margin-bottom:1.2rem}
+  .q p{font-weight:600;margin-bottom:.4rem}
+  .q .opts{display:flex;flex-direction:column;gap:.4rem}
+  .q button{text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:.5rem .9rem;font-size:1rem;cursor:pointer;color:var(--ink);transition:all .15s}
+  .q button:hover{border-color:var(--brand2)}
+  .q button.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .q button.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+  .q .fb{margin-top:.4rem;font-size:.95rem;color:var(--muted);min-height:1.4em}
+
+  /* 步骤动画:仅在屏幕生效,打印静止 */
+  .anim *{animation:slidein .7s ease both}
+  .anim *:nth-child(2){animation-delay:.1s}
+  .anim *:nth-child(3){animation-delay:.2s}
+  .anim *:nth-child(4){animation-delay:.3s}
+  @keyframes slidein{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+  @media print{ .anim *{animation:none!important;opacity:1!important;transform:none!important} }
+
+  /* 术语表 */
+  .glossary{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:1.5rem 2rem;margin-bottom:2rem}
+  .glossary h3{font-size:1.3rem;margin-bottom:.6rem}
+  .glossary dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem}
+  .glossary dt{font-weight:700;color:var(--brand)}
+  .glossary dd{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>✨ 主题名称</h1>
+  <p class="hook">一句话说明"这是什么,为什么和你有关"。</p>
+
+  <section class="step">
+    <span class="step-num">①</span>
+    <h2>第一步小标题</h2>
+    <div class="anim">
+    <svg viewBox="0 0 800 300" role="img" aria-label="...">
+      <!-- 大图:圆角矩形盒子、箭头、小人、数据库圆柱等,占满宽度 -->
+    </svg>
+    </div>
+    <p class="caption">一句图注。术语可加 <span class="term" tabindex="0" data-gloss="大白话解释">悬停术语</span>。</p>
+  </section>
+
+  <!-- 重复 step:②③④... -->
+
+  <section class="recap">
+    <h3>🎯 所以,总结一下</h3>
+    <ul>
+      <li>要点一</li>
+      <li>要点二</li>
+      <li>要点三</li>
+    </ul>
+  </section>
+
+  <section class="quiz">
+    <h3>🧠 考考你</h3>
+    <div class="q">
+      <p>问题一?</p>
+      <div class="opts">
+        <button data-ok>选项 A</button>
+        <button>选项 B</button>
+        <button>选项 C</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <!-- 重复 q:3-4 道题 -->
+  </section>
+
+  <section class="glossary">
+    <h3>📖 术语表</h3>
+    <dl>
+      <dt>术语</dt><dd>大白话解释</dd>
+    </dl>
+  </section>
+</main>
+<script>
+  // Quiz 交互
+  document.querySelectorAll('.q').forEach(q=>{
+    const btns=q.querySelectorAll('button');
+    const fb=q.querySelector('.fb');
+    btns.forEach(b=>{
+      b.addEventListener('click',()=>{
+        btns.forEach(x=>x.classList.remove('ok','bad'));
+        if(b.hasAttribute('data-ok')){
+          b.classList.add('ok');
+          fb.textContent='✅ 答对了!';
+        }else{
+          b.classList.add('bad');
+          const okIdx=[...btns].findIndex(x=>x.hasAttribute('data-ok'));
+          fb.textContent='❌ 再想想——回第 '+(okIdx+1)+' 步看看。';
+        }
+      });
+    });
+  });
+  // 悬停术语点击/触屏支持
+  document.querySelectorAll('.term').forEach(t=>{
+    t.addEventListener('click',e=>{e.preventDefault();t.focus();});
+  });
+</script>
+</body>
+</html>
