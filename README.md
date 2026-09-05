@@ -1,5 +1,7 @@
 # ELI5 — Picture-First Explainer Generator
 
+[English](README.md) | [日本語](README.ja.md)
+
 **Explain anything to someone who knows nothing — as a single self-contained HTML file with big SVG illustrations and minimal text.**
 
 ELI5 turns any topic into a **picture-first, 5-minute read**: large hand-drawn-style SVG figures carry the story, words stay in the background. The output is a single HTML file with zero external requests — it works offline, on an intranet, or double-clicked from disk.
